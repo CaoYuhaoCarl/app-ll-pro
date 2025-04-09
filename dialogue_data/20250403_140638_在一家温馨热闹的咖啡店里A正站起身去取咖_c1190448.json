@@ -1,0 +1,18 @@
+{
+  "original_text": "Round 1:\nB: Oh, I'm so sorry! I didn't see you there. Are you okay?\nA: No worries at all! It was just a little bump. I'm fine, thanks.\n\nRound 2:\nB: That's good to hear. By the way, I noticed the book you're holding—are you into reading? I run a local book club.\nA: Oh, really? I love reading! I've been looking for a book club to join.\n\nRound 3:\nB: That's perfect! Would you like to exchange contact details? I can send you more information about our next meeting.\nA: Sure, that sounds great! Here's my number: [shares number]. Looking forward to it!\nB: Got it! I'll text you the details shortly. By the way, what kind of books do you usually enjoy? We have different reading groups based on genres.  \n\nA: Oh, I mostly read contemporary fiction and the occasional mystery novel. But I'm open to trying new genres too!  \n\nB: Wonderful! Our fiction group is actually discussing a new bestseller next week. I'll add you to that group chat. Do you prefer meeting in person or online?  \n\nA: In person sounds lovely! I enjoy the discussions more when we're all together. This café would be perfect, if that works for the group?  \n\nB: Absolutely! We often meet here on weekends. I'll include the address and time in my text. So glad you're joining us!\nA: That's perfect! By the way, would you mind if I added you on WeChat? It'd be great to stay in touch about book club updates and maybe chat about books between meetings too.  \n\nB: Of course! Here's my QR code - I'd love to exchange book recommendations anytime. The club also has a group chat where we share interesting reads and event reminders. I'll add you right after this!",
+  "key_points": [
+    "B apologizes for the collision and checks if A is okay.",
+    "B notices A's book and mentions running a book club.",
+    "B offers to share contact details to invite A to the book club."
+  ],
+  "intentions": [
+    "Apologize and ensure no harm was done.",
+    "Identify a common interest (reading) to build rapport.",
+    "Exchange contact information to facilitate joining the book club."
+  ],
+  "metadata": {
+    "timestamp": "20250403_140638",
+    "context": "在一家温馨热闹的咖啡店里，A正站起身去取咖啡时，不小心与B发生了轻微碰撞......",
+    "goal": "获取联系方式，加入了读书俱乐部"
+  }
+}

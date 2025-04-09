@@ -1,0 +1,28 @@
+{
+  "original_text": "轮次 1:\nB: Oh, I'm so sorry! I didn't see you standing there. Are you okay?\nA: I'm fine, thank you. I was just getting up to grab a coffee. It was my fault too; I wasn't watching where I was going.\n\n轮次 2:\nB: No worries at all! I'm actually here with a group of friends, and we're part of a book club. We're discussing a new novel today. Would you like to join us?\nA: That sounds interesting! I'd love to learn more about your book club. What kind of books do you usually read?\n\n轮次 3:\nB: We read a variety of genres, but mostly fiction and contemporary literature. We're actually looking for new members. If you're interested, I'd be happy to give you our club's contact information. Here's my card; it has our WhatsApp group details.\nA: That's great! I'd love to join. Here's my number, and you can add me to the group. Thanks for the invite!\n轮次 4:\nB: I've added you to our WhatsApp group. You'll get to see our discussion plans for the next book. We usually meet on the first Saturday of every month. Our next meeting is on the 7th; we're discussing a novel by a contemporary author.\nA: Sounds like a plan! I'm looking forward to it. What novel are you reading next?\n\n轮次 5:\nB: We're reading \"The Nightingale\" by Kristin Hannah. It's a historical fiction novel set in France during World War II. I've heard great reviews about it. Have you read it?\nA: Yes, I read it last year. It was really moving. I think it's a great choice for your club's discussion. I'm sure our perspectives will be interesting.\n\n轮次 6:\nB: Exactly! We're expecting diverse viewpoints. If you're free, we could grab a coffee before the meeting on the 7th to discuss your initial thoughts on the book. \nA: That sounds lovely. Let's plan to meet at this coffee shop at 2 PM on the 7th, an hour before our meeting at the library.",
+  "key_points": [
+    "发生了轻微碰撞",
+    "介绍了读书俱乐部",
+    "交换了联系方式并加入读书俱乐部"
+  ],
+  "intentions": [
+    "缓解尴尬并建立联系",
+    "邀请用户加入读书俱乐部",
+    "成功交换联系方式并完成邀请"
+  ],
+  "key_vocabulary": [
+    "book club",
+    "novel",
+    "contemporary literature",
+    "WhatsApp"
+  ],
+  "key_sentences": [
+    "Would you like to join us?",
+    "Here's my card; it has our WhatsApp group details."
+  ],
+  "metadata": {
+    "timestamp": "20250409_145654",
+    "context": "在一家温馨热闹的咖啡店里，A正站起身去取咖啡时，不小心与B发生了轻微碰撞......",
+    "goal": "交换了联系方式，并成功加入了到了读书俱乐部"
+  }
+}

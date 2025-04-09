@@ -1,0 +1,20 @@
+{
+  "original_text": "A: Oh, I'm so sorry! I didn't see you there as I was heading to get coffee.\nB: No worries at all. These things happen. Are you okay?\nA: Yes, I'm fine. Please excuse my clumsiness. I really like this cozy atmosphere, don't you?\nB: Absolutely! I come here often for the calm and friendly vibe.\nA: Great to hear! By the way, I enjoy meeting new people who love this place. I'm actually a member of a local social club that meets here sometimes.\nB: That sounds interesting. What kind of club is it?\nA: It's a club for people who enjoy sharing ideas, hobbies, and even casual chats over coffee. I think you'd really like it.\nB: That does sound fun. I'd love to hear more about it and maybe join sometime!",
+  "key_points": [
+    "A accidentally collides with B and apologizes.",
+    "B reassures A, showing understanding of the incident.",
+    "They both appreciate the cozy and friendly atmosphere of the café.",
+    "A introduces the idea of a social club, leading to an invitation for B to join."
+  ],
+  "intentions": [
+    "Initiate a polite conversation after the accidental collision.",
+    "Establish a friendly and welcoming rapport between A and B.",
+    "Introduce the social club in a natural, casual manner.",
+    "Invite B to join the club to build a sense of community and shared interests."
+  ],
+  "metadata": {
+    "timestamp": "20250403_095419",
+    "context": "在一家温馨热闹的咖啡店里，A正站起身去取咖啡时，不小心与B发生了轻微碰撞......",
+    "goal": "邀请加入俱乐部"
+  }
+}

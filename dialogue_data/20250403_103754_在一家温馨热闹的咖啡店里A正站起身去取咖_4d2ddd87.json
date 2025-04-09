@@ -1,0 +1,22 @@
+{
+  "original_text": "B: Oh, I'm so sorry! I didn't see you there. Are you okay?\nA: Yes, I'm fine. It's no trouble - these things happen.\nB: I'm glad to hear that. I was just heading to get some coffee when I accidentally bumped into you.\nA: No worries. This café is always so busy, isn't it?\nB: It sure is. By the way, I belong to a small club that meets here every week. Would you like to join us?\nA: A club, really? That sounds interesting. What activities do you have?\nB: We chat about local events, share ideas, and sometimes organize fun gatherings. Everyone is really friendly.\nA: That sounds wonderful. I'd love to learn more about it. Thank you for inviting me!",
+  "key_points": [
+    "Accidental collision in a busy coffee shop",
+    "Polite apologies and reassurance",
+    "Casual conversation about the café atmosphere",
+    "Introduction of the club membership",
+    "Explanation of club activities",
+    "Positive reception of the invitation"
+  ],
+  "intentions": [
+    "To break the ice after an accidental collision",
+    "To start a friendly conversation in a relaxed setting",
+    "To invite the other person to join a local club",
+    "To foster community and social connection"
+  ],
+  "metadata": {
+    "timestamp": "20250403_103754",
+    "context": "在一家温馨热闹的咖啡店里，A正站起身去取咖啡时，不小心与B发生了轻微碰撞......",
+    "goal": "邀请加入俱乐部"
+  }
+}

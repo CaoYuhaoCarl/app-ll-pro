@@ -1,0 +1,21 @@
+{
+  "original_text": "A: Oh, I'm so sorry! I didn't see you there.\nB: No worries at all! It happens.\nA: I couldn't help but notice the book you're holding. I've been wanting to read that edition for ages!\nB: Really? It’s fantastic! I love it. What other genres do you enjoy?\nA: I’m really into literary fiction and travel books. How about you?\nB: Same here! And I’m a big fan of music too. Have you been to any good concerts recently?\nA: I went to a jazz concert last month. It was amazing! What about you?\nB: I love jazz! I went to a local indie festival last summer. Would you like to sit together and chat more?\nA: I’d love that!\nB: Great! By the way, I'm organizing a book club meeting this weekend. Would you like to join?\nA: Absolutely! That sounds like fun.\nB: Awesome! Here, let’s exchange numbers. What’s your name?\nA: I’m Alex. And you?\nB: I’m Sam. Wait, you’re Alex? I follow you on social media! You’re the writer I admire!\nA: Oh wow, I can’t believe it! What a coincidence!",
+  "key_points": [
+    "A and B accidentally bump into each other.",
+    "A notices the book B is holding and starts a conversation.",
+    "They find common interests in literature, travel, and music.",
+    "B invites A to join a book club.",
+    "They exchange contact details, revealing B is a writer A admires."
+  ],
+  "intentions": [
+    "To connect with someone over shared interests.",
+    "To establish a friendship and expand social circles.",
+    "To invite A to a social event (book club).",
+    "To express admiration and curiosity about each other's work."
+  ],
+  "metadata": {
+    "timestamp": "20250402_155147",
+    "context": "在一家温馨热闹的咖啡店里，A正站起身去取咖啡时，不小心与B发生了轻微碰撞。A连忙道歉，B微笑着表示没关系。A注意到他手中的书正是A一直想读却未找到的版本，便鼓起勇气与他攀谈。两人聊得投机，发现彼此有许多共同兴趣。他提议坐在一起继续交流，A欣然同意。在交谈中，A和B分享了对文学、旅行和音乐的热爱，仿佛一见如故。B邀请你参加即将举办的读书会，A愉快地答应了。当A和B交换联系方式时，A惊讶地发现B的名字正是A一直在社交平台上关注、欣赏的作家。原来，这次看似偶然的相遇，竟是命运精心安排的邂逅。",
+    "goal": "签名"
+  }
+}
