@@ -114,3 +114,7 @@ venv.bak/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Dialogue data directories
+dialogue_data/
+final_dialogue_data/
