@@ -302,6 +302,87 @@ def render_agent1_inputs(col):
             key="num_turns_input"
         )
         
+        # 添加戏剧性元素选择
+        st.subheader("戏剧性元素", help="为对话添加戏剧性和吸引力")
+        
+        # 预定义的戏剧性元素
+        dramatic_elements_options = [
+            "身份误会 - 角色误解对方身份导致有趣状况",
+            "阴差阳错 - 一系列巧合导致意外结果",
+            "命运相连 - 角色间存在未知的过去联系",
+            "三角关系 - 涉及第三者的复杂情感",
+            "隐藏真相 - 角色持有重要秘密",
+            "身份反转 - 角色身份出人意料地转变",
+            "误解清除 - 消除长期误会的情感时刻",
+            "灵魂伴侣 - 意外发现惊人相似之处",
+            "阴阳差错 - 一个小误会引发连锁反应",
+            "重逢剧情 - 意外重遇旧识",
+            "隐藏关系 - 角色间有秘密联系",
+            "偶然邂逅 - 偶然相遇带来的命运转折",
+            "戏剧性告白 - 出人意料的感情表达",
+            "假装陌生 - 明知对方却假装不认识",
+            "互换角色 - 角色间的身份或立场互换",
+            "失忆情节 - 角色因意外或创伤失去记忆",
+            "贫富恋 - 贫穷角色与富有角色之间的爱情",
+            "青梅竹马 - 从小一起长大的朋友发展成恋人",
+            "契约婚姻 - 角色因某种原因假结婚，后发展真感情",
+            "敌对到相爱 - 最初对立的角色逐渐相爱",
+            "禁忌之恋 - 因社会地位或家庭反对而受阻的爱情",
+            "绝症情节 - 角色患有严重疾病",
+            "复仇故事 - 角色寻求报复",
+            "身体互换 - 角色交换身体",
+            "穿越时空 - 角色穿越到过去或未来",
+            "超自然元素 - 涉及鬼魂、吸血鬼等",
+            "职场恋情 - 在工作环境中发展的爱情",
+            "单亲家庭 - 单亲父母与接受孩子的伴侣的爱情",
+            "初恋情结 - 角色与初恋重逢或怀有旧情",
+            "高尚的愚蠢 - 角色为对方好而做出牺牲，通常是分手",
+            "家庭反对 - 家庭不赞成恋情",
+            "隐藏身份 - 角色隐瞒真实身份",
+            "异性装扮 - 角色装扮成异性",
+            "包办婚姻 - 家庭安排的婚姻",
+            "突然同居 - 角色突然开始同居，发展感情",
+            "假装约会 - 角色假装约会，后发展真感情",
+            "纯爱 - 强调纯洁和真挚的爱情",
+            "偶像剧 - 以偶像或名人为中心的故事情节",
+            "悬疑情节 - 涉及谜团和侦探元素",
+            "单恋 - 角色单方面爱慕他人",
+            "情敌 - 多个角色争夺同一人的爱",
+            "醉酒告白 - 角色在醉酒时表白",
+            "雨中场景 - 重要情感时刻发生在雨中",
+            "背负情节 - 男主角背着女主角",
+            "背后拥抱 - 角色从背后拥抱对方",
+            "纯爱 - 强调纯洁和真挚的爱情",
+            "偶像剧 - 以偶像或名人为中心的故事情节",
+            "悬疑情节 - 涉及谜团和侦探元素",
+            "单恋 - 角色单方面爱慕他人",
+            "情敌 - 多个角色争夺同一人的爱",
+            "醉酒告白 - 角色在醉酒时表白",
+            "雨中场景 - 重要情感时刻发生在雨中",
+            "背负情节 - 男主角背着女主角",
+            "背后拥抱 - 角色从背后拥抱对方"
+        ]
+        
+        default_dramatic_elements = app_config.get_setting("dramatic_elements_selection", [dramatic_elements_options[0], dramatic_elements_options[3]])
+        dramatic_elements_selection = st.multiselect(
+            "选择戏剧性元素",
+            options=dramatic_elements_options,
+            default=default_dramatic_elements,
+            help="选择要在对话中包含的戏剧性元素",
+            key="dramatic_elements_selection_input"
+        )
+        
+        # 自定义戏剧性元素
+        default_custom_dramatic = app_config.get_setting("custom_dramatic", "")
+        custom_dramatic = st.text_area(
+            "自定义戏剧性元素",
+            value=default_custom_dramatic,
+            placeholder="例如：女主角有心理阴影、男主角有不可告人的秘密...",
+            height=80,
+            help="输入自定义的戏剧性元素，多个元素用逗号分隔",
+            key="custom_dramatic_input"
+        )
+        
         # 添加自定义单词和句型
         with st.expander("高级选项", expanded=False):
             default_custom_vocabulary = app_config.get_setting("custom_vocabulary", "")
@@ -330,6 +411,8 @@ def render_agent1_inputs(col):
             st.session_state.goal_input = ""
             st.session_state.custom_vocabulary_input = ""
             st.session_state.custom_sentence_input = ""
+            st.session_state.dramatic_elements_selection_input = []
+            st.session_state.custom_dramatic_input = ""
         
         return {
             "context": context,
@@ -339,7 +422,9 @@ def render_agent1_inputs(col):
             "difficulty": difficulty,
             "num_turns": num_turns,
             "custom_vocabulary": custom_vocabulary,
-            "custom_sentence": custom_sentence
+            "custom_sentence": custom_sentence,
+            "dramatic_elements_selection": dramatic_elements_selection,
+            "custom_dramatic": custom_dramatic
         }
 
 def render_agent2_inputs(col):
@@ -504,6 +589,23 @@ def process_agent1_generation(inputs):
             st.error("创建Agent失败，请检查agent_registry")
             return False
         
+        # 处理戏剧性元素
+        dramatic_elements = []
+        if inputs.get("dramatic_elements_selection"):
+            dramatic_elements.extend(inputs["dramatic_elements_selection"])
+        
+        if inputs.get("custom_dramatic"):
+            # 分割自定义戏剧性元素（按逗号分割）
+            custom_elements = [elem.strip() for elem in inputs["custom_dramatic"].split(",") if elem.strip()]
+            dramatic_elements.extend(custom_elements)
+        
+        # 存储戏剧性元素选择到应用配置
+        app_config.set_setting("dramatic_elements_selection", inputs.get("dramatic_elements_selection", []))
+        app_config.set_setting("custom_dramatic", inputs.get("custom_dramatic", ""))
+        
+        # 构建戏剧性元素字符串
+        dramatic_elements_str = ", ".join(dramatic_elements)
+        
         with st.spinner("正在生成对话..."):
             # 处理生成请求
             result = agent.process(
@@ -514,7 +616,8 @@ def process_agent1_generation(inputs):
                 difficulty=inputs["difficulty"],
                 num_turns=inputs["num_turns"],
                 custom_vocabulary=inputs["custom_vocabulary"],
-                custom_sentence=inputs["custom_sentence"]
+                custom_sentence=inputs["custom_sentence"],
+                dramatic_elements=dramatic_elements_str
             )
             
             if result is None:
@@ -698,6 +801,7 @@ def render_initial_dialogue_display():
     intentions = st.session_state.dialogue_data.get("intentions", [])
     key_vocabulary = st.session_state.dialogue_data.get("key_vocabulary", [])
     key_sentences = st.session_state.dialogue_data.get("key_sentences", [])
+    dramatic_elements = st.session_state.dialogue_data.get("dramatic_elements", [])
     
     work_mode = app_config.get_setting("work_mode")
     
@@ -724,18 +828,24 @@ def render_initial_dialogue_display():
             key_sentences_text = "\n".join(key_sentences)
             edited_key_sentences = st.text_area("编辑关键情节句型 (每行一个)", value=key_sentences_text, height=150, key="edit_key_sentences")
             
+            st.write("### 戏剧性元素")
+            dramatic_elements_text = "\n".join(dramatic_elements)
+            edited_dramatic_elements = st.text_area("编辑戏剧性元素 (每行一个)", value=dramatic_elements_text, height=150, key="edit_dramatic_elements")
+            
             # 处理编辑后的内容
             edited_key_points_list = [p.strip() for p in edited_key_points.split("\n") if p.strip()]
             edited_intentions_list = [i.strip() for i in edited_intentions.split("\n") if i.strip()]
             edited_key_vocabulary_list = [v.strip() for v in edited_key_vocabulary.split("\n") if v.strip()]
             edited_key_sentences_list = [s.strip() for s in edited_key_sentences.split("\n") if s.strip()]
+            edited_dramatic_elements_list = [d.strip() for d in edited_dramatic_elements.split("\n") if d.strip()]
             
             # 更新编辑状态
             if (edited_text != original_text or 
                 edited_key_points_list != key_points or 
                 edited_intentions_list != intentions or
                 edited_key_vocabulary_list != key_vocabulary or
-                edited_key_sentences_list != key_sentences):
+                edited_key_sentences_list != key_sentences or
+                edited_dramatic_elements_list != dramatic_elements):
                 st.session_state.dialogue_edited = True
                 
                 # 更新编辑后的对话数据
@@ -744,7 +854,8 @@ def render_initial_dialogue_display():
                     "key_points": edited_key_points_list,
                     "intentions": edited_intentions_list,
                     "key_vocabulary": edited_key_vocabulary_list,
-                    "key_sentences": edited_key_sentences_list
+                    "key_sentences": edited_key_sentences_list,
+                    "dramatic_elements": edited_dramatic_elements_list
                 }
                 st.session_state.dialogue_data = edited_dialogue_data
             
@@ -789,6 +900,11 @@ def render_initial_dialogue_display():
                 st.subheader("关键情节句型")
                 for sentence in key_sentences:
                     st.markdown(f"- {sentence}")
+                    
+            if dramatic_elements:
+                st.subheader("戏剧性元素")
+                for element in dramatic_elements:
+                    st.markdown(f"- {element}")
 
 def render_final_dialogue_display():
     """渲染最终对话的显示界面"""

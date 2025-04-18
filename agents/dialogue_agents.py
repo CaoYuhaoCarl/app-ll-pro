@@ -15,7 +15,7 @@ class InitialDialogueAgent(DialogueAgent):
         self.agent_type = "initial_dialogue"
         self.description = "初始对话生成代理"
     
-    def process(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence=""):
+    def process(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence="", dramatic_elements=""):
         """
         处理输入参数并生成初始对话内容
         
@@ -28,13 +28,14 @@ class InitialDialogueAgent(DialogueAgent):
             num_turns (int): 对话轮数
             custom_vocabulary (str): 自定义单词，可为空
             custom_sentence (str): 自定义句型，可为空
+            dramatic_elements (str): 自定义戏剧性元素，可为空
             
         Returns:
             dict: 包含原始文本、关键点、意图、关键情节词汇和关键情节句型的结构化对话数据
         """
-        return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+        return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
     
-    def generate_dialogue(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence=""):
+    def generate_dialogue(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence="", dramatic_elements=""):
         """生成初始对话内容，采用优化策略"""
         # 设置最大尝试次数
         max_attempts = 3
@@ -42,11 +43,11 @@ class InitialDialogueAgent(DialogueAgent):
         
         # 如果轮数较多，使用渐进式生成
         if num_turns > 5:
-            return self._progressive_generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+            return self._progressive_generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
         
         while attempt < max_attempts:
             attempt += 1
-            prompt = self._build_generation_prompt(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+            prompt = self._build_generation_prompt(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
             response = self.call_llm_api(prompt)
             
             try:
@@ -70,6 +71,8 @@ class InitialDialogueAgent(DialogueAgent):
                                 dialogue_data["key_vocabulary"] = []
                             if "key_sentences" not in dialogue_data:
                                 dialogue_data["key_sentences"] = []
+                            if "dramatic_elements" not in dialogue_data:
+                                dialogue_data["dramatic_elements"] = []
                             return dialogue_data
                         elif validate_result["can_fix"] and attempt < max_attempts:
                             # 尝试修复对话
@@ -80,6 +83,8 @@ class InitialDialogueAgent(DialogueAgent):
                                     fixed_dialogue["key_vocabulary"] = []
                                 if "key_sentences" not in fixed_dialogue:
                                     fixed_dialogue["key_sentences"] = []
+                                if "dramatic_elements" not in fixed_dialogue:
+                                    fixed_dialogue["dramatic_elements"] = []
                                 return fixed_dialogue
                         elif attempt == max_attempts:
                             # 最后一次尝试，如果轮数相差不超过1，接受结果
@@ -91,6 +96,8 @@ class InitialDialogueAgent(DialogueAgent):
                                     dialogue_data["key_vocabulary"] = []
                                 if "key_sentences" not in dialogue_data:
                                     dialogue_data["key_sentences"] = []
+                                if "dramatic_elements" not in dialogue_data:
+                                    dialogue_data["dramatic_elements"] = []
                                 return dialogue_data
                 else:
                     # 如果不是 JSON 格式，第三次尝试时接受原始内容
@@ -100,7 +107,8 @@ class InitialDialogueAgent(DialogueAgent):
                             "key_points": [],
                             "intentions": [],
                             "key_vocabulary": [],
-                            "key_sentences": []
+                            "key_sentences": [],
+                            "dramatic_elements": []
                         }
                         return dialogue_data
             except json.JSONDecodeError:
@@ -111,7 +119,8 @@ class InitialDialogueAgent(DialogueAgent):
                         "key_points": [],
                         "intentions": [],
                         "key_vocabulary": [],
-                        "key_sentences": []
+                        "key_sentences": [],
+                        "dramatic_elements": []
                     }
         
         # 如果所有尝试都失败，返回最基本的对话
@@ -288,10 +297,11 @@ class InitialDialogueAgent(DialogueAgent):
             "key_points": ["对话生成失败，使用了后备方案"],
             "intentions": ["完成指定轮数的对话基本框架"],
             "key_vocabulary": [],
-            "key_sentences": []
+            "key_sentences": [],
+            "dramatic_elements": ["生成失败，无法添加戏剧性元素"]
         }
     
-    def _progressive_generate_dialogue(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence=""):
+    def _progressive_generate_dialogue(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence="", dramatic_elements=""):
         """渐进式生成对话，适合轮数较多的情况"""
         # 每批次生成的轮数
         batch_size = 3
@@ -302,7 +312,8 @@ class InitialDialogueAgent(DialogueAgent):
             "key_points": [],
             "intentions": [],
             "key_vocabulary": [],
-            "key_sentences": []
+            "key_sentences": [],
+            "dramatic_elements": []
         }
         
         # 已生成的轮数
@@ -310,7 +321,7 @@ class InitialDialogueAgent(DialogueAgent):
         
         # 第一批次生成
         first_batch_turns = min(batch_size, num_turns)
-        prompt = self._build_generation_prompt(context, dialogue_mode, goal, language, difficulty, first_batch_turns, custom_vocabulary, custom_sentence)
+        prompt = self._build_generation_prompt(context, dialogue_mode, goal, language, difficulty, first_batch_turns, custom_vocabulary, custom_sentence, dramatic_elements)
         response = self.call_llm_api(prompt)
         
         try:
@@ -332,16 +343,17 @@ class InitialDialogueAgent(DialogueAgent):
                         complete_dialogue["intentions"] = dialogue_data.get("intentions", [])
                         complete_dialogue["key_vocabulary"] = dialogue_data.get("key_vocabulary", [])
                         complete_dialogue["key_sentences"] = dialogue_data.get("key_sentences", [])
+                        complete_dialogue["dramatic_elements"] = dialogue_data.get("dramatic_elements", [])
                         generated_turns = validate_result["actual_turns"]
                     else:
                         # 第一批次生成失败，退回到常规方法
-                        return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+                        return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
                 else:
                     # 解析失败，退回到常规方法
-                    return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+                    return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
             else:
                 # 响应格式不正确，退回到常规方法
-                return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+                return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
                 
             # 如果已经生成了足够的轮数，返回结果
             if generated_turns >= num_turns:
@@ -414,9 +426,9 @@ class InitialDialogueAgent(DialogueAgent):
         except Exception as e:
             logging.error(f"渐进式生成失败: {str(e)}")
             # 出错时退回到常规方法
-            return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence)
+            return self.generate_dialogue(context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary, custom_sentence, dramatic_elements)
 
-    def _build_generation_prompt(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence=""):
+    def _build_generation_prompt(self, context, dialogue_mode, goal, language, difficulty, num_turns, custom_vocabulary="", custom_sentence="", dramatic_elements=""):
         """构建用于生成对话的提示"""
         # 确定谁先说话的说明
         first_speaker_instruction = ""
@@ -440,8 +452,37 @@ class InitialDialogueAgent(DialogueAgent):
         if custom_sentence:
             custom_content += f"\n请在对话中自然地使用以下句型: {custom_sentence}"
         
+        # 戏剧性元素指令
+        dramatic_elements_instructions = """
+---戏剧性对话要求---
+为了使对话更加引人入胜，请加入以下戏剧性元素：
+1. 设计一个令人惊讶的转折点或误解（近似剧情"反转"）
+2. 在对话中植入一个有趣的"秘密"或背景故事
+3. 加入一个情感转变点，如恍然大悟的瞬间或认知变化
+4. 确保对话有起伏节奏，不要平铺直叙
+5. 暗示角色之间可能存在的复杂关系或背景联系
+"""
+        
+        # 如果有自定义戏剧性元素，替换默认指令
+        if dramatic_elements and dramatic_elements.strip():
+            dramatic_elements_instructions = """
+---戏剧性对话要求---
+为了使对话更加引人入胜，请特别融入以下戏剧性元素：
+"""
+            # 将传入的戏剧性元素添加为列表项
+            elements_list = []
+            for i, element in enumerate(dramatic_elements.split(','), 1):
+                if element.strip():
+                    elements_list.append(f"{i}. {element.strip()}")
+            
+            if elements_list:
+                dramatic_elements_instructions += "\n" + "\n".join(elements_list) + "\n"
+                dramatic_elements_instructions += """
+请确保这些特定的戏剧性元素自然地融入对话，创造令人惊喜的转折和情感共鸣。避免过度戏剧化，保持对话的真实感和自然流动。
+"""
+        
         prompt = f"""
-        作为一个专业的对话生成 AI，请根据以下要求创建一段对话：
+        作为一个专业的对话生成 AI，请根据以下要求创建一段引人入胜、富有戏剧性的对话：
 
         对话背景: {context}
         对话模式: {dialogue_mode}
@@ -457,6 +498,10 @@ class InitialDialogueAgent(DialogueAgent):
         如果对话模式是"AI先说"，请确保B（AI/助手）是第一个说话的人。
         如果对话模式是"用户先说"，请确保A（用户）是第一个说话的人。
         
+{dramatic_elements_instructions}
+        
+        请确保这些戏剧性元素自然融入对话，服务于整体目标，而非生硬添加。
+        
         请严格生成 {num_turns} 轮对话，其中一轮定义为用户和AI各说一次。
         对话结构应该遵循以下格式:
         
@@ -465,13 +510,15 @@ class InitialDialogueAgent(DialogueAgent):
         1. 生成的对话必须严格包含 {num_turns} 轮
         2. 每轮必须包含用户(A)和AI(B)各说一次
         3. 请确保按照{dialogue_mode}的设置确定第一个说话的角色
+        4. 确保在达成{goal}的同时，加入戏剧性和吸引力元素
 
-        请生成一段自然流畅的对话，包含以下内容并以 JSON 格式返回:
+        请生成一段自然流畅、引人入胜的对话，包含以下内容并以 JSON 格式返回:
         1. 对话原始文本
         2. 情节关键节点
         3. 关键情节词汇（重要词汇，如专业术语或特定单词）
         4. 关键情节句型（重要句型，如特定的语法结构或表达方式）
         5. 对话中隐含的意图与目标
+        6. 戏剧性转折点描述（简要描述对话中的戏剧性转折点）
 
         返回格式示例:
         {{
@@ -479,7 +526,8 @@ class InitialDialogueAgent(DialogueAgent):
             "key_points": ["关键点1", "关键点2"],
             "key_vocabulary": ["关键词1", "关键词2"],
             "key_sentences": ["关键句型1", "关键句型2"],
-            "intentions": ["意图1", "意图2"]
+            "intentions": ["意图1", "意图2"],
+            "dramatic_elements": ["戏剧性转折点1", "情感变化点2"]
         }}
         """
         return prompt
@@ -591,12 +639,14 @@ class StyleAdaptationAgent(DialogueAgent):
         intentions = dialogue_data.get("intentions", [])
         key_vocabulary = dialogue_data.get("key_vocabulary", [])
         key_sentences = dialogue_data.get("key_sentences", [])
+        dramatic_elements = dialogue_data.get("dramatic_elements", [])
         
         # 将列表转换为文本表示
         key_points_text = "\n".join([f"- {point}" for point in key_points])
         intentions_text = "\n".join([f"- {intent}" for intent in intentions])
         key_vocabulary_text = "\n".join([f"- {word}" for word in key_vocabulary])
         key_sentences_text = "\n".join([f"- {sentence}" for sentence in key_sentences])
+        dramatic_elements_text = "\n".join([f"- {element}" for element in dramatic_elements])
         
         # 检测输出语言
         if not language:
@@ -655,7 +705,7 @@ class StyleAdaptationAgent(DialogueAgent):
                 """
                 
             prompt = f"""
-            As a professional dialogue stylist AI, your task is to rewrite the original dialogue based on the given character traits while maintaining the same plot points and intentions of the original dialogue. Please keep the output in English.
+            As a professional dialogue stylist AI, your task is to rewrite the original dialogue based on the given character traits while maintaining the same plot points, intentions, and dramatic elements of the original dialogue. Please keep the output in English.
 
             ## Original Dialogue Information
             Original dialogue text:
@@ -673,6 +723,9 @@ class StyleAdaptationAgent(DialogueAgent):
             Key sentence structures (must be preserved):
             {key_sentences_text}
 
+            Dramatic elements (must be enhanced):
+            {dramatic_elements_text}
+
             ## Character Traits
             # User Character Details
             {user_traits_description}
@@ -681,13 +734,14 @@ class StyleAdaptationAgent(DialogueAgent):
             {ai_traits_description}
 
             Please follow these requirements:
-            1. Maintain all key points and intentions from the original dialogue
+            1. Maintain all key points, intentions, and dramatic elements from the original dialogue
             2. Include ALL key vocabulary and sentence structures from the original dialogue
             3. Adjust the dialogue style, tone, and descriptions according to the character traits
             4. Keep the format of the dialogue with clear speaker distinctions
             {emotion_instructions}
-            6. Keep the output in the SAME LANGUAGE as the original dialogue (English)
-            7. Only return the rewritten dialogue text without additional explanations
+            6. IMPORTANT: Emphasize and enhance the dramatic elements - make the plot twists, secrets, and emotional turns even more engaging and compelling while staying true to the original storyline
+            7. Keep the output in the SAME LANGUAGE as the original dialogue (English)
+            8. Only return the rewritten dialogue text without additional explanations
             """
         else:
             # 根据表情模式构建特定指令
@@ -706,7 +760,7 @@ class StyleAdaptationAgent(DialogueAgent):
                 """
                 
             prompt = f"""
-            作为一个专业的对话风格改编 AI，你的任务是将原始对话根据给定的角色特质进行改编，同时保持原始对话的情节和意图不变。
+            作为一个专业的对话风格改编 AI，你的任务是将原始对话根据给定的角色特质进行改编，同时保持原始对话的情节、意图和戏剧性元素不变。
 
             ## 原始对话信息
             对话原文：
@@ -724,6 +778,9 @@ class StyleAdaptationAgent(DialogueAgent):
             关键句型（必须保留）：
             {key_sentences_text}
 
+            戏剧性元素（必须强化）：
+            {dramatic_elements_text}
+
             ## 角色特质
             # 用户角色详情
             {user_traits_description}
@@ -732,13 +789,14 @@ class StyleAdaptationAgent(DialogueAgent):
             {ai_traits_description}
 
             请按照以下要求进行改编：
-            1. 保持原始对话的全部关键节点和意图
+            1. 保持原始对话的全部关键节点、意图和戏剧性元素
             2. 包含原始对话中的所有关键词汇和句型
             3. 根据用户和 AI 的角色特质调整对话风格、语调和描述方式
             4. 请保持对话的格式，包括清晰的说话人区分
             {emotion_instructions}
-            6. 重要提示：请保持输出语言与原始对话相同（中文）
-            7. 请只返回改编后的对话文本，不需要额外的解释
+            6. 重要提示：强化并突出戏剧性元素 - 让情节转折、秘密和情感变化更加引人入胜，同时保持原有故事线的真实性
+            7. 重要提示：请保持输出语言与原始对话相同（中文）
+            8. 请只返回改编后的对话文本，不需要额外的解释
             """
             
         return prompt

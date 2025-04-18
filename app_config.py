@@ -46,6 +46,9 @@ class AppConfig:
         # 新增自定义单词和句型
         "custom_vocabulary": "",
         "custom_sentence": "",
+        # 新增戏剧性元素设置
+        "dramatic_elements_selection": ["身份误会 - 角色误解对方身份导致有趣状况", "隐藏真相 - 角色持有重要秘密"],
+        "custom_dramatic": "原来两人在小时候曾在同一个夏令营见过，但都不记得了",
         # OpenRouter 配置
         "openrouter_api_key": "",
         "openrouter_models_cache": [],
